@@ -9,6 +9,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <termios.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+
 #include "mm_gps_beacon.h"
 
 // userdata to be passed to the data reader callback. Put anything useful in it.
@@ -17,6 +23,7 @@ typedef struct {
   char ** argv;
   char * filename;
   FILE * handle;
+  int    port;
 } gps_userdata;
 
 // Data reader callback. It must consume and return ON single char at a time. The userdata struct
@@ -24,9 +31,17 @@ typedef struct {
 // The callback signature must conform to: char (mm_gps_char_getter*)(void * data)
 char dumped_char(gps_userdata *data) {
   char result;
-  result = fgetc(data->handle);
+  if (data->handle == NULL) {
+    char buf[1];
+    read(data->port, buf, 1);
+    result = *buf;
+  }
+  else {
+    result = fgetc(data->handle);
+  }
   return result;
 }
+
 
 int main(int argc, const char * argv[]) {
   size_t i, len = 0;
@@ -35,7 +50,17 @@ int main(int argc, const char * argv[]) {
   data.argc = argc;
   data.argv = (char **)argv;
   data.filename = (char *)argv[1]; // yes I know: this is redundant ;)
-  data.handle = fopen(data.filename, "rb");
+  if (strncmp(data.filename, "/dev", 4) == 0) {
+    data.port = open(data.filename, O_RDONLY | O_NOCTTY | O_SYNC);
+    if (data.port == -1) {
+      perror("open_port: Unable to open port - ");
+    }
+    data.handle = NULL;
+  }
+  else {
+    data.handle = fopen(data.filename, "rb");
+    data.port = -1;
+  }
   
   // Initialize the mm_gps object
   mm_gps *gps = mm_gps_init(&data);
@@ -65,7 +90,12 @@ int main(int argc, const char * argv[]) {
   }
   
   // Close file handle
-  fclose(data.handle);
+  if (data.handle) {
+    fclose(data.handle);
+  }
+  else {
+    close(data.port);
+  }
   // Free the gps object
   mm_gps_free(gps);
   return 0;
