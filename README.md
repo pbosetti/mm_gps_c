@@ -4,6 +4,9 @@ Plain C driver for [MarvelMind indoor GPS hedgehog](http://www.marvelmind.com).
 ## Notes
 There are other drivers around, but this driver aims primarily at computational efficiency, using C unions and structures for parsing the binary packets in place rather than recursively, one-byte-at-a-time as in other solutions.
 
+## Platforms
+Tested and working on OS X, Debian, and Raspbian (Raspberry PI).
+
 ## Compiling
 The repo contains a Xcode project. On other platforms, you can use Cmake and create the build target according to your preferred development environment (including Xcode!):
 
@@ -11,6 +14,11 @@ The repo contains a Xcode project. On other platforms, you can use Cmake and cre
     $ make
     
 This generates both two libraries (static and dynamic) and a test executable, that is configured to read data from a binary dump of hedgehog data (as example, those in `dump.hex`).
+
+By default, it uses GCC on linux, clang on OS X. If you prefer clang on linux, just type:
+
+    $ cd build; CC=/usr/bin/clang cmake ..
+    $ make
 
 ## Usage
 Look at the example executable in `main.c`: you have to implement the readout callback, with a signature matching `char dumped_char(void *data)`. The callback must return one single byte (the next available on the serialport, for example) and can use the data argument (a C struct) for passing connection data between calls:
