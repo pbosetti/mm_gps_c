@@ -59,3 +59,13 @@ Look at the example executable in `main.c`: you have to implement the readout ca
   mm_gps_free(gps);
 
 ```
+
+# Note on cross-compilation
+I am finding it useful to cross-compile with Docker. For example, you can easily cross-compile this project for Raspberry Pi by following these steps:
+
+1. Get [Docker](http://docker.com)
+2. Get the [thewtex/cross-compiler-linux-armv6](https://hub.docker.com/r/thewtex/cross-compiler-linux-armv6/) image
+3. In the project root, on a docker console, do: `docker run --rm thewtex/cross-compiler-linux-armv6 > dockross`
+4. On the same console, do: `./dockross cmake -Bbuild -H.`. This will run cmake in the target platform image
+5. On the same console, do: `./dockross make -Cbuild`. This will make all your targets.
+6. Copy the compiled binaries on your Raspberry Pi.

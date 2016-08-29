@@ -37,3 +37,6 @@ xcuserdata
 # cmake
 /build/*
 !/build/.gitkeep
+
+# Docker
+dockross*
