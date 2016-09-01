@@ -104,6 +104,14 @@ double mm_gps_z(mm_gps *gps) {
   return (double)(SWAP16(gps->buffer.packet.hedge.z)) / 100.0;
 }
 
+void mm_gps_coords(mm_gps *gps, double * coords) {
+  if (gps->buffer.crc16 == 0 && gps->buffer.packet.hedge.code != FROZEN) {
+    coords[0] = mm_gps_x(gps);
+    coords[1] = mm_gps_y(gps);
+    coords[2] = mm_gps_z(gps);
+  }
+}
+
 #undef SWAP16
 #undef SWAP32
 

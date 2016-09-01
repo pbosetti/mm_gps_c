@@ -26,7 +26,7 @@ typedef struct {
   int    port;
 } gps_userdata;
 
-// Data reader callback. It must consume and return ON single char at a time. The userdata struct
+// Data reader callback. It must consume and return ONE single char at a time. The userdata struct
 // provides persistency between calls (eg. file handles, ports, counters, command line arguments, etc)
 // The callback signature must conform to: char (mm_gps_char_getter*)(void * data)
 char dumped_char(gps_userdata *data) {
@@ -45,6 +45,7 @@ char dumped_char(gps_userdata *data) {
 
 int main(int argc, const char * argv[]) {
   size_t i, len = 0;
+  double coords[3];
   // fill the userdata struct
   gps_userdata data;
   data.argc = argc;
@@ -82,7 +83,8 @@ int main(int argc, const char * argv[]) {
         printf("#%03zu (%02zu bytes, %04X CRC16) [---------CRC16 error---------]:", i, len, gps->buffer.crc16);
       }
       else {
-        printf("#%03zu (%02zu bytes, %04X CRC16) [%8.2f %6.2f %6.2f %6.2f]:", i, len, gps->buffer.crc16, mm_gps_time(gps), mm_gps_x(gps), mm_gps_y(gps), mm_gps_z(gps));
+        mm_gps_coords(gps, coords);
+        printf("#%03zu (%02zu bytes, %04X CRC16) [%8.2f %6.2f %6.2f %6.2f]:", i, len, gps->buffer.crc16, mm_gps_time(gps), coords[0], coords[1], coords[2]);
       }
       // print the HEX description of the raw packet
       hexprint(gps->buffer.packet.b, len);

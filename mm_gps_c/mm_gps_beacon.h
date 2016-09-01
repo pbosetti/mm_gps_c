@@ -129,4 +129,10 @@ double mm_gps_y(mm_gps *gps);
  */
 double mm_gps_z(mm_gps *gps);
 
+/*!
+ Set the provided array to the three coordinates of the last packet (obtained with a previous call to mm_gps_next_raw_packet).
+ \param coords Pointer to the vector of three double to be filled with the coordinates. It must be pre-allocated.
+ */
+void mm_gps_coords(mm_gps *gps, double * coords);
+
 #endif /* mm_gps_beacon_h */
