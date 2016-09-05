@@ -11,10 +11,10 @@
 #include "mm_gps_beacon.h"
 
 #define buflen(gps) gps->buffer.head - gps->buffer.packet.b
-#if !(defined(BYTE_ORDER) && defined(BIG_ENDIAN))
+#if !(defined(BYTE_ORDER) && defined(BIG_ENDIAN)) && !defined(__BYTE_ORDER__)
 #error "Cannot figure out byte order on this platform"
 #endif
-#if BYTE_ORDER == BIG_ENDIAN
+#if (BYTE_ORDER == BIG_ENDIAN) || __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define SWAP16(num) ((num & 0xff) >> 8) | (num << 8)
 #define SWAP32(num) ((num & 0xff000000) >> 24) | ((num & 0x00ff0000) >> 8) | ((num & 0x0000ff00) << 8) | (num << 24)
 #else

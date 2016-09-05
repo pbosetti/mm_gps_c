@@ -44,7 +44,11 @@ int open_stream(gps_userdata *data) {
     cfsetospeed(&tty_ctrl, data->baudrate);
     cfsetispeed(&tty_ctrl, data->baudrate);
     // 8N1, no flow control
+#ifndef POKY_LINUX
     tty_ctrl.c_cflag     &=  ~(PARENB|CSTOPB|CSIZE|CRTSCTS);
+#else
+    tty_ctrl.c_cflag     &=  ~(PARENB|CSTOPB|CSIZE);
+#endif
     tty_ctrl.c_cflag     |=  CS8;
     // no signaling chars, no echo, no canonical processing
     tty_ctrl.c_lflag     =   0;
@@ -110,7 +114,7 @@ int main(int argc, const char * argv[]) {
   // Loop on packets: every call to mm_gps_next_raw_packet reads a new packet.
   // Parsed contents are available into gps->buffer.packet.hedge (if it is a hedgehog data packet, code 1)
   // ot into gps->buffer.packet.beacons (if the system is frozen, code 2).
-  for (i=0; i<1000; i++) {
+  for (i=0; i<100; i++) {
     if (!(len = mm_gps_next_raw_packet(gps))) {
       i--; // if len is zero, we are dealing with a fragment packet: discard it!
     }

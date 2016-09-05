@@ -12,6 +12,12 @@
 #include <stdio.h>
 #include <sys/types.h>
 
+#ifdef POKY_LINUX
+typedef unsigned int uint;
+typedef unsigned short int u_short;
+typedef unsigned short int ushort;
+#endif
+
 #ifndef uchar
 typedef unsigned char uchar;
 #endif
