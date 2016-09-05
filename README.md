@@ -69,3 +69,11 @@ I am finding it useful to cross-compile with Docker. For example, you can easily
 4. On the same console, do: `./dockross cmake -Bbuild -H.`. This will run cmake in the target platform image
 5. On the same console, do: `./dockross make -Cbuild`. This will make all your targets.
 6. Copy the compiled binaries on your Raspberry Pi.
+
+Docker can also be used for cross-compiling to Intel Edison:
+
+1. get the [p4010/edison-build](https://hub.docker.com/r/p4010/edison-build) image;
+2. from the project root, type: `docker run -ti --rm -v$PWD:/root/build p4010/edison-build`; this will put you in a shell, where `/root/build` is your project root dir;
+3. build the project: `rm -rf build/*; cmake -Bbuild -H.; make -Cbuild`;
+4. copy the compiled binaries on your Edison stick.
+ 
