@@ -45,10 +45,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		885C97C71D7D77A600F5D040 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				88EF87961D6DBC45005FF29E /* mm_gps_beacon.h */,
+				88BFC0521D6ED49E001E6273 /* mm_gps_utils.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		88EF87821D6DBB8B005FF29E = {
 			isa = PBXGroup;
 			children = (
 				88BFC0501D6ED322001E6273 /* dump.hex */,
+				885C97C71D7D77A600F5D040 /* include */,
 				88EF878D1D6DBB8B005FF29E /* mm_gps_c */,
 				88EF878C1D6DBB8B005FF29E /* Products */,
 			);
@@ -67,9 +77,7 @@
 			children = (
 				88EF878E1D6DBB8B005FF29E /* main.c */,
 				88EF87951D6DBC45005FF29E /* mm_gps_beacon.c */,
-				88EF87961D6DBC45005FF29E /* mm_gps_beacon.h */,
 				88BFC0511D6ED49E001E6273 /* mm_gps_utils.c */,
-				88BFC0521D6ED49E001E6273 /* mm_gps_utils.h */,
 			);
 			path = mm_gps_c;
 			sourceTree = "<group>";
